@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
+  <title>Electronics_V1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="unity-container">
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
+
+    <div id="loading-overlay">
+      <img id="loading-logo" src="logo.png" alt="Logo">
+      <div id="loading-text">Loading</div>
+
+      <div id="loading-bar-background">
+        <div id="loading-bar-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.querySelector("#unity-canvas");
+    const loadingOverlay = document.querySelector("#loading-overlay");
+    const loadingBarFill = document.querySelector("#loading-bar-fill");
+
+    const buildUrl = "Build";
+    const loaderUrl = buildUrl + "/PRM_Electronics.loader.js";
+
+    const config = {
+      dataUrl: buildUrl + "/PRM_Electronics.data",
+      frameworkUrl: buildUrl + "/PRM_Electronics.framework.js",
+      codeUrl: buildUrl + "/PRM_Electronics.wasm",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "PRM",
+      productName: "Electronics_V1",
+      productVersion: "0.1.0",
+      matchWebGLToCanvasSize: true,
+      devicePixelRatio: 1
+    };
+
+    const script = document.createElement("script");
+    script.src = loaderUrl;
+    script.onload = () => {
+      createUnityInstance(canvas, config, (progress) => {
+        loadingBarFill.style.width = (progress * 100) + "%";
+      }).then((unityInstance) => {
+        loadingOverlay.classList.add("hidden");
+      }).catch((message) => {
+        alert(message);
+      });
+    };
+
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>
